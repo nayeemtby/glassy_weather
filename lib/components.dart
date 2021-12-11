@@ -138,3 +138,33 @@ class MetricsCard extends StatelessWidget {
     );
   }
 }
+
+class TimeCard extends StatelessWidget {
+  const TimeCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+          color: MyColors.secondaryPurple,
+          borderRadius: BorderRadius.circular(24)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "06:00 AM",
+            style: TxtThemes.semiB12.copyWith(color: MyColors.white2),
+          ),
+          Image.asset(
+            'assets/states/tmp.png',
+          ),
+          Text(
+            "24\u00B0C",
+            style: TxtThemes.black18.copyWith(color: MyColors.white2),
+          )
+        ],
+      ),
+    );
+  }
+}
