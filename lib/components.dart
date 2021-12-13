@@ -11,30 +11,44 @@ class DayCard extends StatelessWidget {
         clipBehavior: Clip.none,
         alignment: Alignment.topCenter,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(40),
-            child: Material(
-              color: MyColors.secondaryPurple,
-              child: Transform.translate(
-                offset: const Offset(0, -24),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image.asset("assets/states/tmp.png"),
-                      Text(
-                        " 23\u00B0",
-                        style:
-                            TxtThemes.bold72.copyWith(color: MyColors.white2),
-                      ),
-                      Text(
-                        "Moon Cloud Fast Wind",
-                        style:
-                            TxtThemes.black11.copyWith(color: MyColors.white2),
-                      )
-                    ],
-                  ),
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: const [
+                BoxShadow(
+                    color: MyColors.primaryPurple,
+                    blurRadius: 200,
+                    offset: Offset(10, 10),
+                    spreadRadius: -8)
+              ],
+              borderRadius: BorderRadius.circular(40),
+              image: const DecorationImage(
+                  image: AssetImage('assets/bg/cardBG.png'), fit: BoxFit.fill),
+            ),
+            child: Transform.translate(
+              offset: const Offset(0, -24),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 48,
+                    ),
+                    SvgPicture.asset(
+                      "assets/states/windy_night-02.svg",
+                      height: 128,
+                      color: MyColors.white2,
+                    ),
+                    Text(
+                      " 23\u00B0",
+                      style: TxtThemes.bold72.copyWith(color: MyColors.white2),
+                    ),
+                    Text(
+                      "Moon Cloud Fast Wind",
+                      style: TxtThemes.black11.copyWith(color: MyColors.white2),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -150,9 +164,10 @@ class TimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-          color: MyColors.secondaryPurple,
+          image: const DecorationImage(
+              image: AssetImage('assets/bg/cardBG.png'), fit: BoxFit.fill),
           borderRadius: BorderRadius.circular(24)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -161,9 +176,10 @@ class TimeCard extends StatelessWidget {
             "06:00 AM",
             style: TxtThemes.semiB12.copyWith(color: MyColors.white2),
           ),
-          Image.asset(
-            'assets/states/tmp.png',
-            scale: 2,
+          SvgPicture.asset(
+            'assets/states/windy_night-02.svg',
+            color: MyColors.white2,
+            height: 64,
           ),
           Text(
             "24\u00B0C",
@@ -181,15 +197,20 @@ class TransparentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
       decoration: BoxDecoration(
           border: Border.all(width: 2, color: MyColors.white.withOpacity(0.65)),
           color: MyColors.white.withOpacity(0.3),
           borderRadius: BorderRadius.circular(40)),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset('assets/states/tmp.png'),
+          SvgPicture.asset(
+            'assets/states/windy_night-02.svg',
+            height: 128,
+            color: MyColors.white2,
+          ),
           const SizedBox(
             width: 10,
           ),
@@ -223,7 +244,7 @@ class WeatherListCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
                 color: MyColors.white.withOpacity(0.3),
-                offset: Offset(0, -50),
+                offset: const Offset(0, -50),
                 spreadRadius: -25)
           ],
           color: MyColors.white,
@@ -241,9 +262,10 @@ class WeatherListCard extends StatelessWidget {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Image.asset(
-                            'assets/states/tmp.png',
-                            scale: 2,
+                          SvgPicture.asset(
+                            'assets/states/windy_night-02.svg',
+                            height: 80,
+                            color: MyColors.secondaryPurple,
                           ),
                           const SizedBox(
                             width: 18,

@@ -41,14 +41,14 @@ class Dashboard extends StatelessWidget {
               alignment: Alignment.topCenter,
               width: double.infinity,
               color: MyColors.purple1,
-              child: Stack(fit: StackFit.loose, children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Transform.translate(
-                        offset: const Offset(0, -80),
-                        child: const MetricsCard()),
-                    Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Transform.translate(
+                      offset: const Offset(0, -80), child: const MetricsCard()),
+                  Transform.translate(
+                    offset: const Offset(0, -30),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -83,10 +83,10 @@ class Dashboard extends StatelessWidget {
                         )
                       ],
                     ),
-                    const TimeCard(),
-                  ],
-                ),
-              ]),
+                  ),
+                  const TimeCard(),
+                ],
+              ),
             ),
           ],
         ),

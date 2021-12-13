@@ -11,7 +11,10 @@ class DetailsScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 16),
-        color: MyColors.primaryPurple,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/bg/detailsBG.png'),
+                fit: BoxFit.fill)),
         child: Column(
           children: [
             Row(
@@ -21,7 +24,10 @@ class DetailsScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(Icons.arrow_back_ios_new_rounded)),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: MyColors.white2,
+                    )),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -46,7 +52,7 @@ class DetailsScreen extends StatelessWidget {
             ),
             const TransparentCard(),
             const SizedBox(
-              height: 24,
+              height: 42,
             ),
             const Expanded(child: WeatherListCard())
           ],
