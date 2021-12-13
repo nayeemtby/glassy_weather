@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'theme.dart';
 import 'components.dart';
 import 'details.dart';
@@ -33,8 +34,23 @@ class Dashboard extends StatelessWidget {
                 const SizedBox(
                   height: 24,
                 ),
-                const DayCard(),
+                SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: ScrollSnapList(
+                      clipBehavior: Clip.none,
+                      itemBuilder: (ctx, index) => const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 48),
+                            child: DayCard(),
+                          ),
+                      itemCount: 7,
+                      itemSize: 128 + (48 * 2) + (48 * 2),
+                      onItemFocus: (_) {}),
+                )
               ],
+            ),
+            const SizedBox(
+              height: 24,
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 24),
@@ -84,7 +100,21 @@ class Dashboard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const TimeCard(),
+                  SingleChildScrollView(
+                    clipBehavior: Clip.none,
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var i = 0; i < 7; i++)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: const TimeCard(),
+                          )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

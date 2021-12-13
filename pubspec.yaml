@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  scroll_snap_list: any
   flutter_svg: any
   flutter:
     sdk: flutter
