@@ -62,8 +62,13 @@ class MetricsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: MyColors.white, borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(boxShadow: const [
+        BoxShadow(
+            color: MyColors.secondaryPurple,
+            blurRadius: 30,
+            spreadRadius: -20,
+            offset: Offset(0, 30))
+      ], color: MyColors.white, borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(32),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -158,6 +163,7 @@ class TimeCard extends StatelessWidget {
           ),
           Image.asset(
             'assets/states/tmp.png',
+            scale: 2,
           ),
           Text(
             "24\u00B0C",
@@ -166,5 +172,115 @@ class TimeCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class TransparentCard extends StatelessWidget {
+  const TransparentCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+      decoration: BoxDecoration(
+          border: Border.all(width: 2, color: MyColors.white.withOpacity(0.65)),
+          color: MyColors.white.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(40)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset('assets/states/tmp.png'),
+          const SizedBox(
+            width: 10,
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '23\u00B0',
+                style: TxtThemes.bold72.copyWith(color: MyColors.white2),
+              ),
+              Text(
+                'Moon Cloud Fast Wind',
+                style: TxtThemes.black11.copyWith(color: MyColors.white2),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class WeatherListCard extends StatelessWidget {
+  const WeatherListCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: MyColors.white.withOpacity(0.3),
+                offset: Offset(0, -50),
+                spreadRadius: -25)
+          ],
+          color: MyColors.white,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Column(
+          children: [
+            Text(
+              "Future Weather",
+              style: TxtThemes.black18.copyWith(color: MyColors.primaryGray),
+            ),
+            Expanded(
+                child: ListView.separated(
+                    itemBuilder: (ctx, index) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/states/tmp.png',
+                            scale: 2,
+                          ),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Text(
+                            "23\u00B0",
+                            style: TxtThemes.black36
+                                .copyWith(color: MyColors.primaryGray),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Monday",
+                                style: TxtThemes.extraB13
+                                    .copyWith(color: MyColors.primaryGray),
+                              ),
+                              Text(
+                                "9th March 2021",
+                                style: TxtThemes.extraB13
+                                    .copyWith(color: MyColors.secondaryPurple),
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    },
+                    separatorBuilder: (ctx, index) => const Divider(
+                          thickness: 1,
+                          color: MyColors.secondaryGray,
+                        ),
+                    itemCount: 9))
+          ],
+        ));
   }
 }
