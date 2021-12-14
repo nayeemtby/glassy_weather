@@ -3,7 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'theme.dart';
 
 class DayCard extends StatelessWidget {
-  const DayCard({Key? key}) : super(key: key);
+  final Map<String, dynamic> data;
+  final String day;
+  const DayCard({Key? key, required this.data, required this.day})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,7 @@ class DayCard extends StatelessWidget {
                       color: MyColors.white2,
                     ),
                     Text(
-                      " 23\u00B0",
+                      " ${data['c'] ?? -1}\u00B0",
                       style: TxtThemes.bold72.copyWith(color: MyColors.white2),
                     ),
                     Text(
@@ -61,7 +64,7 @@ class DayCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(40)),
               padding: const EdgeInsets.all(8),
               child: Text(
-                "Sunday, 8th March 2021",
+                day,
                 style: TxtThemes.bold11.copyWith(color: MyColors.primaryGray),
               ),
             ),
@@ -71,7 +74,8 @@ class DayCard extends StatelessWidget {
 }
 
 class MetricsCard extends StatelessWidget {
-  const MetricsCard({Key? key}) : super(key: key);
+  final Map metrics;
+  const MetricsCard({Key? key, required this.metrics}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class MetricsCard extends StatelessWidget {
             children: [
               SvgPicture.asset("assets/metrics/carbon_humidity.svg"),
               Text(
-                "75%",
+                "${metrics['humidity'] ?? -1}%",
                 style: TxtThemes.black16.copyWith(color: MyColors.primaryGray),
               ),
               Text("Humidity",
@@ -109,7 +113,7 @@ class MetricsCard extends StatelessWidget {
             children: [
               SvgPicture.asset("assets/metrics/tabler_wind.svg"),
               Text(
-                "8 km/h",
+                "${metrics['wind'] ?? -1} km/h",
                 style: TxtThemes.black16.copyWith(color: MyColors.primaryGray),
               ),
               Text("Wind",
@@ -126,7 +130,7 @@ class MetricsCard extends StatelessWidget {
             children: [
               SvgPicture.asset("assets/metrics/ion_speedometer.svg"),
               Text(
-                "1011",
+                "${metrics['press'] ?? -1}",
                 style: TxtThemes.black16.copyWith(color: MyColors.primaryGray),
               ),
               Text("Air Pressure",
@@ -143,7 +147,7 @@ class MetricsCard extends StatelessWidget {
             children: [
               SvgPicture.asset("assets/metrics/ic_round-visibility.svg"),
               Text(
-                "6 km",
+                "${metrics['vis'] ?? -1} km",
                 style: TxtThemes.black16.copyWith(color: MyColors.primaryGray),
               ),
               Text("Visibility",
@@ -159,31 +163,37 @@ class MetricsCard extends StatelessWidget {
 }
 
 class TimeCard extends StatelessWidget {
-  const TimeCard({Key? key}) : super(key: key);
+  final bool primary;
+  const TimeCard({Key? key, this.primary = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-          image: const DecorationImage(
-              image: AssetImage('assets/bg/cardBG.png'), fit: BoxFit.fill),
+          color: primary ? null : MyColors.white,
+          image: primary
+              ? const DecorationImage(
+                  image: AssetImage('assets/bg/cardBG.png'), fit: BoxFit.fill)
+              : null,
           borderRadius: BorderRadius.circular(24)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             "06:00 AM",
-            style: TxtThemes.semiB12.copyWith(color: MyColors.white2),
+            style: TxtThemes.semiB12.copyWith(
+                color: primary ? MyColors.white2 : MyColors.primaryGray),
           ),
           SvgPicture.asset(
             'assets/states/windy_night-02.svg',
-            color: MyColors.white2,
+            color: primary ? MyColors.white2 : MyColors.secondaryPurple,
             height: 64,
           ),
           Text(
             "24\u00B0C",
-            style: TxtThemes.black18.copyWith(color: MyColors.white2),
+            style: TxtThemes.black18.copyWith(
+                color: primary ? MyColors.white2 : MyColors.primaryGray),
           )
         ],
       ),
