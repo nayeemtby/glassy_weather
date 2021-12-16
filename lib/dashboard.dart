@@ -22,6 +22,9 @@ class Dashboard extends StatelessWidget {
             future: getCurrent('Dhaka'),
             initialData: cache,
             builder: (ctx, snap) {
+              if (snap.hasError) {
+                print(snap.error);
+              }
               Map<String, dynamic> current = snap.data as Map<String, dynamic>;
               current = current['current'];
               return Column(
@@ -36,7 +39,7 @@ class Dashboard extends StatelessWidget {
                             .copyWith(color: MyColors.primaryGray),
                       ),
                       Text(
-                        getTime(),
+                        getFormattedTime(DateTime.now()),
                         style: TxtThemes.semiB12
                             .copyWith(color: MyColors.primaryGray),
                       ),
@@ -52,7 +55,7 @@ class Dashboard extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 48),
                                   child: DayCard(
-                                    day: getDay(),
+                                    day: getFormattedDay(DateTime.now()),
                                     data: {'c': current['temp_c']},
                                   ),
                                 ),

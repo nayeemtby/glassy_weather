@@ -21,12 +21,10 @@ List<String> _months = [
   'November',
   'December',
 ];
-String getTime() {
-  DateTime now = DateTime.now();
-  return '${now.hour}:${now.minute}';
+String getFormattedTime(DateTime time) {
+  return '${time.hour}:${time.minute < 10 ? '0' + time.minute.toString() : time.minute}';
 }
 
-String getDay() {
-  DateTime today = DateTime.now();
+String getFormattedDay(DateTime today) {
   return '${_weekDay[today.weekday - 1]}, ${_months[today.month - 1]} ${today.day}, ${today.year}';
 }
