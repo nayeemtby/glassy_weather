@@ -35,6 +35,76 @@ abstract class TxtThemes {
       TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
 }
 
+abstract class TxtThemesXl {
+  static const TextStyle extraB24 =
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 24);
+
+  static const TextStyle extraB13 =
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 13);
+
+  static const TextStyle semiB12 =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
+  static const TextStyle bold11 =
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 24);
+
+  static const TextStyle bold72 =
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 142);
+
+  static const TextStyle black9 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 9);
+
+  static const TextStyle black11 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 24);
+
+  static const TextStyle black12 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 12);
+
+  static const TextStyle black16 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 26);
+
+  static const TextStyle black18 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 26);
+
+  static const TextStyle black36 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
+}
+
+abstract class TxtThemesXs {
+  static const TextStyle extraB24 =
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 24);
+
+  static const TextStyle extraB13 =
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 13);
+
+  static const TextStyle semiB12 =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: 11);
+
+  static const TextStyle bold11 =
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 9);
+
+  static const TextStyle bold72 =
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 48);
+
+  static const TextStyle black9 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 9);
+
+  static const TextStyle black11 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 9);
+
+  static const TextStyle black12 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 12);
+
+  static const TextStyle black16 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 14);
+
+  static const TextStyle black18 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 17);
+
+  static const TextStyle black36 =
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
+}
+
 abstract class MyColors {
   static const Color white = Color(0xffffffff);
 
@@ -55,4 +125,18 @@ abstract class MyColors {
   static const Color purple3 = Color(0xffDDDBF3);
 
   static const Color fifo = Color(0xffF1F0FA);
+}
+
+Size getTxtSize(
+    {required String txt,
+    int maxLines = 1,
+    required double factor,
+    required TextStyle style}) {
+  return (TextPainter(
+          maxLines: maxLines,
+          text: TextSpan(text: txt, style: style),
+          textDirection: TextDirection.ltr,
+          textScaleFactor: factor)
+        ..layout())
+      .size;
 }

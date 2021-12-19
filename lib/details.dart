@@ -7,6 +7,7 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MediaQueryData mqData = MediaQuery.of(context);
     return Scaffold(
       body: Container(
         width: double.infinity,

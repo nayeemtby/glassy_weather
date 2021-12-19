@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  adaptive_breakpoints: any
   shared_preferences: any
   timezone_utc_offset: any
   path_provider: any
