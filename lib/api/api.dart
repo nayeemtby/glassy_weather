@@ -1,7 +1,6 @@
 import 'package:http/http.dart';
 import 'key.dart';
 import 'dart:convert';
-import 'cache/current.dart';
 import 'io.dart';
 
 Future<Map> getCurrent(String location) async {
@@ -29,17 +28,6 @@ Future<Map> getCurrent(String location) async {
     return ret;
   }
   return cache;
-}
-
-Future<Map> getForecast(String location, String days) async {
-  Map ret = {};
-  Response response = await get(Uri.parse(
-      'http://api.weatherapi.com/v1/forecast.json?key=$apiKey&q=$location&aqi=no'));
-  if (response.statusCode != 200) {
-    return cache;
-  }
-  ret = jsonDecode(response.body);
-  return ret;
 }
 
 Future<Map?> fetchCurrent(String location) async {
