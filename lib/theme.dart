@@ -37,13 +37,13 @@ abstract class TxtThemes {
 
 abstract class TxtThemesXl {
   static const TextStyle extraB24 =
-      TextStyle(fontWeight: FontWeight.w800, fontSize: 24);
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 48);
 
   static const TextStyle extraB13 =
-      TextStyle(fontWeight: FontWeight.w800, fontSize: 13);
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 26);
 
   static const TextStyle semiB12 =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+      TextStyle(fontWeight: FontWeight.w600, fontSize: 26);
 
   static const TextStyle bold11 =
       TextStyle(fontWeight: FontWeight.w700, fontSize: 24);
@@ -55,19 +55,19 @@ abstract class TxtThemesXl {
       TextStyle(fontWeight: FontWeight.w900, fontSize: 9);
 
   static const TextStyle black11 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 24);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 28);
 
   static const TextStyle black12 =
       TextStyle(fontWeight: FontWeight.w900, fontSize: 12);
 
   static const TextStyle black16 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 26);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
 
   static const TextStyle black18 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 26);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
 
   static const TextStyle black36 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 72);
 }
 
 abstract class TxtThemesXs {
@@ -75,7 +75,7 @@ abstract class TxtThemesXs {
       TextStyle(fontWeight: FontWeight.w800, fontSize: 24);
 
   static const TextStyle extraB13 =
-      TextStyle(fontWeight: FontWeight.w800, fontSize: 13);
+      TextStyle(fontWeight: FontWeight.w800, fontSize: 11);
 
   static const TextStyle semiB12 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: 11);
@@ -99,10 +99,10 @@ abstract class TxtThemesXs {
       TextStyle(fontWeight: FontWeight.w900, fontSize: 14);
 
   static const TextStyle black18 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 17);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 16);
 
   static const TextStyle black36 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 36);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 28);
 }
 
 abstract class MyColors {

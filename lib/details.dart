@@ -8,6 +8,18 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mqData = MediaQuery.of(context);
+    final TextStyle titleStyle;
+    final TextStyle dayStyle;
+    if (mqData.size.width < 600) {
+      titleStyle = TxtThemesXs.extraB24;
+      dayStyle = TxtThemesXs.bold11;
+    } else if (mqData.size.width < 1440) {
+      titleStyle = TxtThemes.extraB24;
+      dayStyle = TxtThemes.bold11;
+    } else {
+      titleStyle = TxtThemesXl.extraB24;
+      dayStyle = TxtThemesXl.bold11;
+    }
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -25,21 +37,21 @@ class DetailsScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: MyColors.white2,
+                      size: mqData.size.width < 1440 ? 24 : 36,
                     )),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "Today's Weather",
-                      style:
-                          TxtThemes.extraB24.copyWith(color: MyColors.white2),
+                      style: titleStyle.copyWith(color: MyColors.white2),
                     ),
                     Text(
                       'Sunday, 8th March 2021',
-                      style: TxtThemes.bold11.copyWith(color: MyColors.white2),
+                      style: dayStyle.copyWith(color: MyColors.white2),
                     )
                   ],
                 ),
@@ -51,11 +63,16 @@ class DetailsScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const TransparentCard(),
+            TransparentCard(
+              width: mqData.size.width,
+            ),
             const SizedBox(
               height: 42,
             ),
-            const Expanded(child: WeatherListCard())
+            Expanded(
+                child: WeatherListCard(
+              width: mqData.size.width,
+            ))
           ],
         ),
       ),

@@ -328,10 +328,30 @@ class TimeCard extends StatelessWidget {
 }
 
 class TransparentCard extends StatelessWidget {
-  const TransparentCard({Key? key}) : super(key: key);
+  final double width;
+  const TransparentCard({
+    Key? key,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle tempStyle;
+    final double iconSize;
+    final TextStyle conditionStyle;
+    if (width < 600) {
+      tempStyle = TxtThemesXs.bold72;
+      iconSize = 96;
+      conditionStyle = TxtThemesXs.black11;
+    } else if (width < 1440) {
+      tempStyle = TxtThemes.bold72;
+      iconSize = 128;
+      conditionStyle = TxtThemes.black11;
+    } else {
+      tempStyle = TxtThemesXl.bold72;
+      iconSize = 240;
+      conditionStyle = TxtThemesXl.black11;
+    }
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
@@ -344,7 +364,7 @@ class TransparentCard extends StatelessWidget {
         children: [
           SvgPicture.asset(
             'assets/states/windy_night-02.svg',
-            height: 128,
+            height: iconSize,
             color: MyColors.white2,
           ),
           const SizedBox(
@@ -355,11 +375,11 @@ class TransparentCard extends StatelessWidget {
             children: [
               Text(
                 '23\u00B0',
-                style: TxtThemes.bold72.copyWith(color: MyColors.white2),
+                style: tempStyle.copyWith(color: MyColors.white2),
               ),
               Text(
                 'Moon Cloud Fast Wind',
-                style: TxtThemes.black11.copyWith(color: MyColors.white2),
+                style: conditionStyle.copyWith(color: MyColors.white2),
               )
             ],
           )
@@ -370,10 +390,34 @@ class TransparentCard extends StatelessWidget {
 }
 
 class WeatherListCard extends StatelessWidget {
-  const WeatherListCard({Key? key}) : super(key: key);
+  final double width;
+  const WeatherListCard({
+    Key? key,
+    required this.width,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle titleStyle;
+    final double iconSize;
+    final TextStyle tempStyle;
+    final TextStyle dayStyle;
+    if (width < 600) {
+      titleStyle = TxtThemesXs.black18;
+      iconSize = 60;
+      tempStyle = TxtThemesXs.black36;
+      dayStyle = TxtThemesXs.extraB13;
+    } else if (width < 1440) {
+      titleStyle = TxtThemes.black18;
+      iconSize = 80;
+      tempStyle = TxtThemes.black36;
+      dayStyle = TxtThemes.extraB13;
+    } else {
+      titleStyle = TxtThemesXl.black18;
+      iconSize = 140;
+      tempStyle = TxtThemesXl.black36;
+      dayStyle = TxtThemesXl.extraB13;
+    }
     return Container(
         padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
         decoration: BoxDecoration(
@@ -390,17 +434,18 @@ class WeatherListCard extends StatelessWidget {
           children: [
             Text(
               "Future Weather",
-              style: TxtThemes.black18.copyWith(color: MyColors.primaryGray),
+              style: titleStyle.copyWith(color: MyColors.primaryGray),
             ),
             Expanded(
                 child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (ctx, index) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SvgPicture.asset(
                             'assets/states/windy_night-02.svg',
-                            height: 80,
+                            height: iconSize,
                             color: MyColors.secondaryPurple,
                           ),
                           const SizedBox(
@@ -408,11 +453,11 @@ class WeatherListCard extends StatelessWidget {
                           ),
                           Text(
                             "23\u00B0",
-                            style: TxtThemes.black36
-                                .copyWith(color: MyColors.primaryGray),
+                            style:
+                                tempStyle.copyWith(color: MyColors.primaryGray),
                           ),
-                          const SizedBox(
-                            width: 10,
+                          SizedBox(
+                            width: width < 1440 ? 10 : 24,
                           ),
                           Column(
                             mainAxisSize: MainAxisSize.min,
@@ -420,13 +465,13 @@ class WeatherListCard extends StatelessWidget {
                             children: [
                               Text(
                                 "Monday",
-                                style: TxtThemes.extraB13
-                                    .copyWith(color: MyColors.primaryGray),
+                                style: dayStyle.copyWith(
+                                    color: MyColors.primaryGray),
                               ),
                               Text(
                                 "9th March 2021",
-                                style: TxtThemes.extraB13
-                                    .copyWith(color: MyColors.secondaryPurple),
+                                style: dayStyle.copyWith(
+                                    color: MyColors.secondaryPurple),
                               )
                             ],
                           )

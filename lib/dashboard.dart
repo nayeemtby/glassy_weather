@@ -16,54 +16,61 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mqData = MediaQuery.of(context);
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(top: mqData.size.width < 600 ? 16 : 24),
-        color: MyColors.fifo,
-        width: double.infinity,
-        child: FutureBuilder(
-            future: getCurrent('Dhaka'),
-            initialData: cache,
-            builder: (ctx, snap) {
-              if (snap.hasError) {
-                print(snap.error);
-              }
-              Map<String, dynamic> current = snap.data as Map<String, dynamic>;
-              current = current['current'];
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Dhaka",
-                        style: TxtThemes.extraB24
-                            .copyWith(color: MyColors.primaryGray),
-                      ),
-                      Text(
-                        getFormattedTime(DateTime.now()),
-                        style: TxtThemes.semiB12
-                            .copyWith(color: MyColors.primaryGray),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      _CarouselSlider(
-                        mqData: mqData,
-                        current: current,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  _BottomUnit(
-                    current: current,
-                    mqData: mqData,
-                  ),
-                ],
-              );
-            }),
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(top: mqData.size.width < 600 ? 16 : 24),
+          color: MyColors.fifo,
+          width: double.infinity,
+          child: FutureBuilder(
+              future: getCurrent('Dhaka'),
+              initialData: cache,
+              builder: (ctx, snap) {
+                if (snap.hasError) {
+                  print(snap.error);
+                }
+                Map<String, dynamic> current =
+                    snap.data as Map<String, dynamic>;
+                current = current['current'];
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Dhaka",
+                          style: (mqData.size.width < 1440
+                                  ? TxtThemes.extraB24
+                                  : TxtThemesXl.extraB24)
+                              .copyWith(color: MyColors.primaryGray),
+                        ),
+                        Text(
+                          getFormattedTime(DateTime.now()),
+                          style: (mqData.size.width < 1440
+                                  ? TxtThemes.semiB12
+                                  : TxtThemesXl.semiB12)
+                              .copyWith(color: MyColors.primaryGray),
+                        ),
+                        SizedBox(
+                          height: mqData.size.width < 1440 ? 24 : 38,
+                        ),
+                        _CarouselSlider(
+                          mqData: mqData,
+                          current: current,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    _BottomUnit(
+                      current: current,
+                      mqData: mqData,
+                    ),
+                  ],
+                );
+              }),
+        ),
       ),
     );
   }
@@ -204,8 +211,8 @@ class _BottomUnit extends StatelessWidget {
       navStyle = TxtThemes.black16;
     } else {
       gutter = 24;
-      iconHeight = 36;
-      pad = 38;
+      iconHeight = 42;
+      pad = 46;
       dataStyle = TxtThemesXl.black16;
       titleStyle = TxtThemesXl.black11;
       navStyle = TxtThemesXl.black16;
@@ -213,7 +220,8 @@ class _BottomUnit extends StatelessWidget {
     metricsHeight =
         iconHeight + (pad * 2) + dataStyle.fontSize! + titleStyle.fontSize!;
     return Container(
-      padding: const EdgeInsets.fromLTRB(30, 0, 30, 24),
+      padding:
+          EdgeInsets.fromLTRB(30, 0, 30, mqData.size.width < 1440 ? 24 : 36),
       alignment: Alignment.topCenter,
       width: double.infinity,
       color: MyColors.purple1,
@@ -301,7 +309,7 @@ class _HourForecast extends StatelessWidget {
       timeStyle = TxtThemes.semiB12;
       tempStyle = TxtThemes.black18;
     } else {
-      iconHeight = 96;
+      iconHeight = 128;
       timeStyle = TxtThemesXl.semiB12;
       tempStyle = TxtThemesXl.black18;
     }
@@ -312,9 +320,9 @@ class _HourForecast extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (var i = 0; i < 7; i++)
+          for (var i = 0; i < 24; i++)
             Padding(
-              padding: const EdgeInsets.only(right: 12),
+              padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
               child: TimeCard(
                 iconHeight: iconHeight,
                 tempStyle: tempStyle,
