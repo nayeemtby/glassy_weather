@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:glassy_weather/api/cache/forecast.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'api/locals.dart';
 import 'api/cache/current.dart';
@@ -22,15 +23,16 @@ class Dashboard extends StatelessWidget {
           color: MyColors.fifo,
           width: double.infinity,
           child: FutureBuilder(
-              future: getCurrent('Dhaka'),
+              future: getForecast('Dhaka'),
               initialData: cache,
               builder: (ctx, snap) {
                 if (snap.hasError) {
                   print(snap.error);
                 }
-                Map<String, dynamic> current =
+                Map<String, dynamic> forecast =
                     snap.data as Map<String, dynamic>;
-                current = current['current'];
+                Map<String, dynamic> current = forecast['current'];
+                forecast = forecast['forecast'];
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -65,6 +67,7 @@ class Dashboard extends StatelessWidget {
                     ),
                     _BottomUnit(
                       current: current,
+                      forecast: forecast,
                       mqData: mqData,
                     ),
                   ],
@@ -158,7 +161,10 @@ class _CarouselSlider extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: cardWidth * 0.2),
           child: DayCardXs(
             day: getFormattedDay(DateTime.now()),
-            data: {'c': current['temp_c']},
+            data: {
+              'c': current['temp_c'],
+              'text': current['condition']['text'],
+            },
             hpad: hpad,
             vpad: vpad,
             imageSize: cloudSize,
@@ -180,10 +186,12 @@ class _CarouselSlider extends StatelessWidget {
 class _BottomUnit extends StatelessWidget {
   final Map current;
   final MediaQueryData mqData;
+  final Map forecast;
   const _BottomUnit({
     Key? key,
     required this.current,
     required this.mqData,
+    required this.forecast,
   }) : super(key: key);
 
   @override
@@ -281,6 +289,8 @@ class _BottomUnit extends StatelessWidget {
           ),
           _HourForecast(
             width: mqData.size.width,
+            today: forecast['forecastday'][0]['hour'],
+            tomorrow: forecast['forecastday'][1]['hour'],
           )
         ],
       ),
@@ -290,9 +300,13 @@ class _BottomUnit extends StatelessWidget {
 
 class _HourForecast extends StatelessWidget {
   final double width;
+  final List today;
+  final List tomorrow;
   const _HourForecast({
     Key? key,
     required this.width,
+    required this.today,
+    required this.tomorrow,
   }) : super(key: key);
 
   @override
@@ -319,19 +333,53 @@ class _HourForecast extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < 24; i++)
-            Padding(
-              padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
-              child: TimeCard(
-                iconHeight: iconHeight,
-                tempStyle: tempStyle,
-                timeStyle: timeStyle,
-                primary: i == 0 ? true : false,
-              ),
-            )
-        ],
+        children: _genChildren(iconHeight, tempStyle, timeStyle),
       ),
     );
+  }
+
+  List<Widget> _genChildren(
+    double iconHeight,
+    TextStyle tempStyle,
+    TextStyle timeStyle,
+  ) {
+    int track = 0;
+    List<Widget> ret = [];
+    DateTime _now = DateTime.now();
+    for (var i = _now.hour; i < today.length; i++) {
+      print(today[i]['time'].toString().substring(10));
+      ret.add(
+        Padding(
+          padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
+          child: TimeCard(
+            time: today[i]['time'].toString().substring(10),
+            temp: today[i]['temp_c'].toString(),
+            iconHeight: iconHeight,
+            tempStyle: tempStyle,
+            timeStyle: timeStyle,
+            primary: track == 0 ? true : false,
+          ),
+        ),
+      );
+      track++;
+    }
+    if (track < 24) {
+      track = 24 - track;
+      for (var i = 0; i < track; i++) {
+        ret.add(
+          Padding(
+            padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
+            child: TimeCard(
+              time: tomorrow[i]['time'].toString().substring(10),
+              temp: tomorrow[i]['temp_c'].toString(),
+              iconHeight: iconHeight,
+              tempStyle: tempStyle,
+              timeStyle: timeStyle,
+            ),
+          ),
+        );
+      }
+    }
+    return ret;
   }
 }

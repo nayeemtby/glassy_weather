@@ -137,7 +137,7 @@ class DayCardXs extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Moon Cloud Fast Wind",
+                  data['text'],
                   style: statusStyle.copyWith(
                     color: MyColors.white2,
                   ),
@@ -284,12 +284,16 @@ class TimeCard extends StatelessWidget {
   final TextStyle timeStyle;
   final TextStyle tempStyle;
   final bool primary;
+  final String time;
+  final String temp;
   const TimeCard({
     Key? key,
     this.primary = false,
     required this.iconHeight,
     required this.timeStyle,
     required this.tempStyle,
+    required this.time,
+    required this.temp,
   }) : super(key: key);
 
   @override
@@ -307,7 +311,7 @@ class TimeCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "06:00 AM",
+            time,
             style: timeStyle.copyWith(
                 color: primary ? MyColors.white2 : MyColors.primaryGray),
           ),
@@ -317,7 +321,7 @@ class TimeCard extends StatelessWidget {
             height: iconHeight,
           ),
           Text(
-            "24\u00B0C",
+            "$temp\u00B0C",
             style: tempStyle.copyWith(
                 color: primary ? MyColors.white2 : MyColors.primaryGray),
           )
