@@ -1,4 +1,4 @@
-Map forecast = {
+Map<String, dynamic> cache = {
   "location": {
     "name": "Dhaka",
     "region": "",

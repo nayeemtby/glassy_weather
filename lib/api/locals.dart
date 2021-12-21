@@ -28,3 +28,11 @@ String getFormattedTime(DateTime time) {
 String getFormattedDay(DateTime today) {
   return '${_weekDay[today.weekday - 1]}, ${_months[today.month - 1]} ${today.day}, ${today.year}';
 }
+
+String getWeekDay(DateTime today) {
+  return _weekDay[today.weekday];
+}
+
+String getMonthDay(DateTime today) {
+  return '${_months[today.month - 1]} ${today.day}, ${today.year}';
+}

@@ -3,15 +3,16 @@ import 'key.dart';
 import 'dart:convert';
 import 'io.dart';
 
-Future<Map> getForecast(String location) async {
+Future<Map<String, dynamic>> getForecast(
+    String location, bool skipCache) async {
   const contentKey = 'forecast.json';
   final String _tmp = await getContent(contentKey);
   final DateTime _now = DateTime.now();
 
-  Map? ret = {};
-  Map cache = {};
+  Map<String, dynamic>? ret = {};
+  Map<String, dynamic> cache = {};
 
-  if (_tmp.isNotEmpty) {
+  if (_tmp.isNotEmpty && skipCache == false) {
     cache = jsonDecode(_tmp);
     if (_now
             .difference(DateTime.fromMillisecondsSinceEpoch(cache['cachedAt']))
@@ -68,8 +69,8 @@ Future<Map?> fetchCurrent(String location) async {
   return ret;
 }
 
-Future<Map?> fetchForecast(String location) async {
-  Map ret = {};
+Future<Map<String, dynamic>?> fetchForecast(String location) async {
+  Map<String, dynamic> ret = {};
   Response response = await get(Uri.parse(
       'http://api.weatherapi.com/v1/forecast.json?key=$apiKey&q=$location&aqi=no&days=7'));
   if (response.statusCode != 200) {

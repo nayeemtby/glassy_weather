@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:glassy_weather/api/locals.dart';
 import 'theme.dart';
 
 class DayCard extends StatelessWidget {
@@ -333,9 +334,13 @@ class TimeCard extends StatelessWidget {
 
 class TransparentCard extends StatelessWidget {
   final double width;
+  final String temperature;
+  final String status;
   const TransparentCard({
     Key? key,
     required this.width,
+    required this.temperature,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -358,7 +363,7 @@ class TransparentCard extends StatelessWidget {
     }
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
           border: Border.all(width: 2, color: MyColors.white.withOpacity(0.65)),
           color: MyColors.white.withOpacity(0.3),
@@ -378,11 +383,11 @@ class TransparentCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '23\u00B0',
+                '$temperature\u00B0C',
                 style: tempStyle.copyWith(color: MyColors.white2),
               ),
               Text(
-                'Moon Cloud Fast Wind',
+                status,
                 style: conditionStyle.copyWith(color: MyColors.white2),
               )
             ],
@@ -395,9 +400,11 @@ class TransparentCard extends StatelessWidget {
 
 class WeatherListCard extends StatelessWidget {
   final double width;
+  final List forecast;
   const WeatherListCard({
     Key? key,
     required this.width,
+    required this.forecast,
   }) : super(key: key);
 
   @override
@@ -406,88 +413,94 @@ class WeatherListCard extends StatelessWidget {
     final double iconSize;
     final TextStyle tempStyle;
     final TextStyle dayStyle;
+    final double hpad;
     if (width < 600) {
+      hpad = 20;
       titleStyle = TxtThemesXs.black18;
-      iconSize = 60;
+      iconSize = 48;
       tempStyle = TxtThemesXs.black36;
       dayStyle = TxtThemesXs.extraB13;
     } else if (width < 1440) {
+      hpad = 30;
       titleStyle = TxtThemes.black18;
       iconSize = 80;
       tempStyle = TxtThemes.black36;
       dayStyle = TxtThemes.extraB13;
     } else {
+      hpad = 30;
       titleStyle = TxtThemesXl.black18;
       iconSize = 140;
       tempStyle = TxtThemesXl.black36;
       dayStyle = TxtThemesXl.extraB13;
     }
     return Container(
-        padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: MyColors.white.withOpacity(0.3),
-                offset: const Offset(0, -50),
-                spreadRadius: -25)
-          ],
-          color: MyColors.white,
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Column(
-          children: [
-            Text(
-              "Future Weather",
-              style: titleStyle.copyWith(color: MyColors.primaryGray),
-            ),
-            Expanded(
-                child: ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (ctx, index) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/states/windy_night-02.svg',
-                            height: iconSize,
-                            color: MyColors.secondaryPurple,
-                          ),
-                          const SizedBox(
-                            width: 18,
-                          ),
-                          Text(
-                            "23\u00B0",
-                            style:
-                                tempStyle.copyWith(color: MyColors.primaryGray),
-                          ),
-                          SizedBox(
-                            width: width < 1440 ? 10 : 24,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Monday",
-                                style: dayStyle.copyWith(
-                                    color: MyColors.primaryGray),
-                              ),
-                              Text(
-                                "9th March 2021",
-                                style: dayStyle.copyWith(
-                                    color: MyColors.secondaryPurple),
-                              )
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                    separatorBuilder: (ctx, index) => const Divider(
-                          thickness: 1,
-                          color: MyColors.secondaryGray,
+      padding: EdgeInsets.fromLTRB(hpad, 30, hpad, 20),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: MyColors.white.withOpacity(0.3),
+              offset: const Offset(0, -50),
+              spreadRadius: -25)
+        ],
+        color: MyColors.white,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Column(
+        children: [
+          Text(
+            "Future Weather",
+            style: titleStyle.copyWith(color: MyColors.primaryGray),
+          ),
+          Expanded(
+            child: ListView.separated(
+              itemCount: forecast.length,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (ctx, index) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/states/windy_night-02.svg',
+                      height: iconSize,
+                      color: MyColors.secondaryPurple,
+                    ),
+                    const SizedBox(
+                      width: 18,
+                    ),
+                    Text(
+                      forecast[index]['day']['avgtemp_c'].toString() +
+                          "\u00B0C",
+                      style: tempStyle.copyWith(color: MyColors.primaryGray),
+                    ),
+                    SizedBox(
+                      width: width < 1440 ? 10 : 24,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          getWeekDay(DateTime.now()),
+                          style: dayStyle.copyWith(color: MyColors.primaryGray),
                         ),
-                    itemCount: 9))
-          ],
-        ));
+                        Text(
+                          getMonthDay(DateTime.now()),
+                          style: dayStyle.copyWith(
+                              color: MyColors.secondaryPurple),
+                        )
+                      ],
+                    ),
+                  ],
+                );
+              },
+              separatorBuilder: (ctx, index) => const Divider(
+                thickness: 1,
+                color: MyColors.secondaryGray,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

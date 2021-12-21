@@ -102,7 +102,7 @@ abstract class TxtThemesXs {
       TextStyle(fontWeight: FontWeight.w900, fontSize: 16);
 
   static const TextStyle black36 =
-      TextStyle(fontWeight: FontWeight.w900, fontSize: 28);
+      TextStyle(fontWeight: FontWeight.w900, fontSize: 24);
 }
 
 abstract class MyColors {

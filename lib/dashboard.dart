@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:glassy_weather/api/cache/forecast.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'api/locals.dart';
 import 'api/cache/current.dart';
@@ -10,9 +9,14 @@ import 'components.dart';
 import 'details.dart';
 import 'package:adaptive_breakpoints/adaptive_breakpoints.dart';
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
 
+class _DashboardState extends State<Dashboard> {
+  bool fetchNow = true;
   @override
   Widget build(BuildContext context) {
     MediaQueryData mqData = MediaQuery.of(context);
@@ -23,12 +27,13 @@ class Dashboard extends StatelessWidget {
           color: MyColors.fifo,
           width: double.infinity,
           child: FutureBuilder(
-              future: getForecast('Dhaka'),
+              future: getForecast('London', fetchNow),
               initialData: cache,
               builder: (ctx, snap) {
                 if (snap.hasError) {
                   print(snap.error);
                 }
+                fetchNow = false;
                 Map<String, dynamic> forecast =
                     snap.data as Map<String, dynamic>;
                 Map<String, dynamic> current = forecast['current'];
@@ -39,12 +44,34 @@ class Dashboard extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          "Dhaka",
-                          style: (mqData.size.width < 1440
-                                  ? TxtThemes.extraB24
-                                  : TxtThemesXl.extraB24)
-                              .copyWith(color: MyColors.primaryGray),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                width: 24,
+                              ),
+                              Text(
+                                "Dhaka",
+                                style: (mqData.size.width < 1440
+                                        ? TxtThemes.extraB24
+                                        : TxtThemesXl.extraB24)
+                                    .copyWith(color: MyColors.primaryGray),
+                              ),
+                              InkWell(
+                                child: Icon(
+                                  Icons.replay_outlined,
+                                  color: MyColors.primaryGray,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    fetchNow = true;
+                                  });
+                                },
+                              )
+                            ],
+                          ),
                         ),
                         Text(
                           getFormattedTime(DateTime.now()),
@@ -265,7 +292,9 @@ class _BottomUnit extends StatelessWidget {
                     Navigator.push(
                         context,
                         CupertinoPageRoute(
-                            builder: (ctx) => const DetailsScreen()));
+                            builder: (ctx) => DetailsScreen(
+                                  forecast: forecast['forecastday'],
+                                )));
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -347,7 +376,6 @@ class _HourForecast extends StatelessWidget {
     List<Widget> ret = [];
     DateTime _now = DateTime.now();
     for (var i = _now.hour; i < today.length; i++) {
-      print(today[i]['time'].toString().substring(10));
       ret.add(
         Padding(
           padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
