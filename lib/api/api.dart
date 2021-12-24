@@ -4,15 +4,18 @@ import 'dart:convert';
 import 'io.dart';
 
 Future<Map<String, dynamic>> getForecast(
-    String location, bool skipCache) async {
+  String location,
+  bool skipCache,
+) async {
   const contentKey = 'forecast.json';
   final String _tmp = await getContent(contentKey);
   final DateTime _now = DateTime.now();
 
-  Map<String, dynamic>? ret = {};
+  Map<String, dynamic>? ret;
+  Map<String, dynamic>? current;
   Map<String, dynamic> cache = {};
 
-  if (_tmp.isNotEmpty && skipCache == false) {
+  if (skipCache == false && _tmp.isNotEmpty) {
     cache = jsonDecode(_tmp);
     if (_now
             .difference(DateTime.fromMillisecondsSinceEpoch(cache['cachedAt']))
@@ -22,22 +25,29 @@ Future<Map<String, dynamic>> getForecast(
     }
   }
 
-  ret = await fetchForecast(location);
+  current = await getCurrent(location);
+
+  double lon = current['coord']['lon'];
+  double lat = current['coord']['lat'];
+
+  ret = await fetchForecast(lon, lat);
+
   if (ret != null) {
     ret['cachedAt'] = _now.millisecondsSinceEpoch;
     putContent(contentKey, jsonEncode(ret));
     return ret;
   }
+
   return cache;
 }
 
-Future<Map> getCurrent(String location) async {
+Future<Map<String, dynamic>> getCurrent(String location) async {
   const contentKey = 'current.json';
   final String _tmp = await getContent(contentKey);
   final DateTime _now = DateTime.now();
 
-  Map? ret = {};
-  Map cache = {};
+  Map<String, dynamic>? ret = {};
+  Map<String, dynamic> cache = {};
 
   if (_tmp.isNotEmpty) {
     cache = jsonDecode(_tmp);
@@ -58,24 +68,36 @@ Future<Map> getCurrent(String location) async {
   return cache;
 }
 
-Future<Map?> fetchCurrent(String location) async {
-  Map ret = {};
-  Response response = await get(Uri.parse(
-      'http://api.weatherapi.com/v1/current.json?key=$apiKey&q=$location&aqi=no'));
+Future<Map<String, dynamic>?> fetchCurrent(String location) async {
+  Map<String, dynamic> ret = {};
+
+  Response response = await get(
+    Uri.parse(
+      'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$newKey',
+    ),
+  );
+
   if (response.statusCode != 200) {
     return null;
   }
+
   ret = jsonDecode(response.body);
   return ret;
 }
 
-Future<Map<String, dynamic>?> fetchForecast(String location) async {
+Future<Map<String, dynamic>?> fetchForecast(double lon, double lat) async {
   Map<String, dynamic> ret = {};
-  Response response = await get(Uri.parse(
-      'http://api.weatherapi.com/v1/forecast.json?key=$apiKey&q=$location&aqi=no&days=7'));
+
+  Response response = await get(
+    Uri.parse(
+      'https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=minutely,alerts&units=metric&appid=$newKey',
+    ),
+  );
+
   if (response.statusCode != 200) {
     return null;
   }
+
   ret = jsonDecode(response.body);
   return ret;
 }
