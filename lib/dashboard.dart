@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'api/locals.dart';
-import 'api/cache/current.dart';
+import 'api/cache/newforcast.dart';
 import 'api/api.dart';
 import 'theme.dart';
 import 'components.dart';
 import 'details.dart';
-import 'package:adaptive_breakpoints/adaptive_breakpoints.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -27,79 +26,78 @@ class _DashboardState extends State<Dashboard> {
           color: MyColors.fifo,
           width: double.infinity,
           child: FutureBuilder(
-              future: getForecast('London', fetchNow),
-              initialData: cache,
-              builder: (ctx, snap) {
-                if (snap.hasError) {
-                  print(snap.error);
-                }
-                fetchNow = false;
-                Map<String, dynamic> forecast =
-                    snap.data as Map<String, dynamic>;
-                Map<String, dynamic> current = forecast['current'];
-                forecast = forecast['forecast'];
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const SizedBox(
-                                width: 24,
+            future: getForecast('Dhaka', fetchNow),
+            initialData: cacheForcast,
+            builder: (ctx, snap) {
+              if (snap.hasError) {
+                print(snap.error);
+              }
+              fetchNow = false;
+              Map<String, dynamic> forecast = snap.data as Map<String, dynamic>;
+              Map<String, dynamic> current = forecast['current'];
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: 24,
+                            ),
+                            Text(
+                              "Dhaka",
+                              style: (mqData.size.width < 1440
+                                      ? TxtThemes.extraB24
+                                      : TxtThemesXl.extraB24)
+                                  .copyWith(color: MyColors.primaryGray),
+                            ),
+                            InkWell(
+                              child: const Icon(
+                                Icons.replay_outlined,
+                                color: MyColors.primaryGray,
                               ),
-                              Text(
-                                "Dhaka",
-                                style: (mqData.size.width < 1440
-                                        ? TxtThemes.extraB24
-                                        : TxtThemesXl.extraB24)
-                                    .copyWith(color: MyColors.primaryGray),
-                              ),
-                              InkWell(
-                                child: Icon(
-                                  Icons.replay_outlined,
-                                  color: MyColors.primaryGray,
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    fetchNow = true;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
+                              onTap: () {
+                                setState(() {
+                                  fetchNow = true;
+                                });
+                              },
+                            )
+                          ],
                         ),
-                        Text(
-                          getFormattedTime(DateTime.now()),
-                          style: (mqData.size.width < 1440
-                                  ? TxtThemes.semiB12
-                                  : TxtThemesXl.semiB12)
-                              .copyWith(color: MyColors.primaryGray),
-                        ),
-                        SizedBox(
-                          height: mqData.size.width < 1440 ? 24 : 38,
-                        ),
-                        _CarouselSlider(
-                          mqData: mqData,
-                          current: current,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    _BottomUnit(
-                      current: current,
-                      forecast: forecast,
-                      mqData: mqData,
-                    ),
-                  ],
-                );
-              }),
+                      ),
+                      Text(
+                        getFormattedTime(DateTime.now()),
+                        style: (mqData.size.width < 1440
+                                ? TxtThemes.semiB12
+                                : TxtThemesXl.semiB12)
+                            .copyWith(color: MyColors.primaryGray),
+                      ),
+                      SizedBox(
+                        height: mqData.size.width < 1440 ? 24 : 38,
+                      ),
+                      _CarouselSlider(
+                        mqData: mqData,
+                        current: current,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  _BottomUnit(
+                    current: current,
+                    forecast: forecast,
+                    mqData: mqData,
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -108,7 +106,7 @@ class _DashboardState extends State<Dashboard> {
 
 class _CarouselSlider extends StatelessWidget {
   final MediaQueryData mqData;
-  final Map current;
+  final Map<String, dynamic> current;
   const _CarouselSlider({
     Key? key,
     required this.mqData,
@@ -189,8 +187,8 @@ class _CarouselSlider extends StatelessWidget {
           child: DayCardXs(
             day: getFormattedDay(DateTime.now()),
             data: {
-              'c': current['temp_c'],
-              'text': current['condition']['text'],
+              'c': current['temp'],
+              'text': current['weather'][0]['main'],
             },
             hpad: hpad,
             vpad: vpad,
@@ -213,7 +211,7 @@ class _CarouselSlider extends StatelessWidget {
 class _BottomUnit extends StatelessWidget {
   final Map current;
   final MediaQueryData mqData;
-  final Map forecast;
+  final Map<String, dynamic> forecast;
   const _BottomUnit({
     Key? key,
     required this.current,
@@ -273,9 +271,9 @@ class _BottomUnit extends StatelessWidget {
                 gutter: gutter,
                 metrics: {
                   'humidity': current['humidity'],
-                  'wind': current['wind_kph'],
-                  'press': current['pressure_mb'],
-                  'vis': current['vis_km']
+                  'wind': current['wind_speed'],
+                  'press': current['pressure'],
+                  'vis': current['visibility'] / 1000
                 },
               )),
           Transform.translate(
@@ -290,11 +288,13 @@ class _BottomUnit extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (ctx) => DetailsScreen(
-                                  forecast: forecast['forecastday'],
-                                )));
+                      context,
+                      CupertinoPageRoute(
+                        builder: (ctx) => DetailsScreen(
+                          forecast: forecast,
+                        ),
+                      ),
+                    );
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -318,8 +318,7 @@ class _BottomUnit extends StatelessWidget {
           ),
           _HourForecast(
             width: mqData.size.width,
-            today: forecast['forecastday'][0]['hour'],
-            tomorrow: forecast['forecastday'][1]['hour'],
+            hours: forecast['hourly'],
           )
         ],
       ),
@@ -329,13 +328,11 @@ class _BottomUnit extends StatelessWidget {
 
 class _HourForecast extends StatelessWidget {
   final double width;
-  final List today;
-  final List tomorrow;
+  final List hours;
   const _HourForecast({
     Key? key,
     required this.width,
-    required this.today,
-    required this.tomorrow,
+    required this.hours,
   }) : super(key: key);
 
   @override
@@ -372,42 +369,27 @@ class _HourForecast extends StatelessWidget {
     TextStyle tempStyle,
     TextStyle timeStyle,
   ) {
-    int track = 0;
+    Map<String, dynamic> _tmp;
     List<Widget> ret = [];
-    DateTime _now = DateTime.now();
-    for (var i = _now.hour; i < today.length; i++) {
+    for (var i = 0; i < 24; i++) {
+      _tmp = hours[i];
       ret.add(
         Padding(
           padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
           child: TimeCard(
-            time: today[i]['time'].toString().substring(10),
-            temp: today[i]['temp_c'].toString(),
+            time: DateTime.fromMillisecondsSinceEpoch(_tmp['dt'] * 1000)
+                .toString()
+                .substring(11, 16),
+            temp: _tmp['temp'].toString(),
             iconHeight: iconHeight,
             tempStyle: tempStyle,
             timeStyle: timeStyle,
-            primary: track == 0 ? true : false,
+            primary: i == 0 ? true : false,
           ),
         ),
       );
-      track++;
     }
-    if (track < 24) {
-      track = 24 - track;
-      for (var i = 0; i < track; i++) {
-        ret.add(
-          Padding(
-            padding: EdgeInsets.only(right: width < 1440 ? 12 : 16),
-            child: TimeCard(
-              time: tomorrow[i]['time'].toString().substring(10),
-              temp: tomorrow[i]['temp_c'].toString(),
-              iconHeight: iconHeight,
-              tempStyle: tempStyle,
-              timeStyle: timeStyle,
-            ),
-          ),
-        );
-      }
-    }
+
     return ret;
   }
 }

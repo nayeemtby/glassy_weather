@@ -132,7 +132,7 @@ class DayCardXs extends StatelessWidget {
                   color: MyColors.white2,
                 ),
                 Text(
-                  " ${data['c'] ?? -1}\u00B0",
+                  " ${(data['c'] as double).toStringAsFixed(1)}\u00B0",
                   style: temperatureStyle.copyWith(
                     color: MyColors.white2,
                   ),
@@ -400,11 +400,11 @@ class TransparentCard extends StatelessWidget {
 
 class WeatherListCard extends StatelessWidget {
   final double width;
-  final List forecast;
+  final List days;
   const WeatherListCard({
     Key? key,
     required this.width,
-    required this.forecast,
+    required this.days,
   }) : super(key: key);
 
   @override
@@ -453,7 +453,7 @@ class WeatherListCard extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: forecast.length,
+              itemCount: days.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (ctx, index) {
                 return Row(
@@ -468,7 +468,8 @@ class WeatherListCard extends StatelessWidget {
                       width: 18,
                     ),
                     Text(
-                      forecast[index]['day']['avgtemp_c'].toString() +
+                      (days[index]['temp']['day'] as double)
+                              .toStringAsFixed(1) +
                           "\u00B0C",
                       style: tempStyle.copyWith(color: MyColors.primaryGray),
                     ),

@@ -4,7 +4,7 @@ import 'theme.dart';
 import 'components.dart';
 
 class DetailsScreen extends StatelessWidget {
-  final List forecast;
+  final Map<String, dynamic> forecast;
   const DetailsScreen({
     Key? key,
     required this.forecast,
@@ -70,8 +70,9 @@ class DetailsScreen extends StatelessWidget {
                 height: 16,
               ),
               TransparentCard(
-                status: forecast[0]['day']['condition']['text'],
-                temperature: forecast[0]['day']['avgtemp_c'].toString(),
+                status: forecast['current']['weather'][0]['main'],
+                temperature:
+                    (forecast['current']['temp'] as double).toStringAsFixed(1),
                 width: mqData.size.width,
               ),
               const SizedBox(
@@ -80,7 +81,7 @@ class DetailsScreen extends StatelessWidget {
               Expanded(
                   child: WeatherListCard(
                 width: mqData.size.width,
-                forecast: forecast,
+                days: forecast['daily'],
               ))
             ],
           ),
