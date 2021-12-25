@@ -30,7 +30,7 @@ String getFormattedDay(DateTime today) {
 }
 
 String getWeekDay(DateTime today) {
-  return _weekDay[today.weekday];
+  return _weekDay[today.weekday - 1];
 }
 
 String getMonthDay(DateTime today) {
