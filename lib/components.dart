@@ -351,15 +351,15 @@ class TransparentCard extends StatelessWidget {
     if (width < 600) {
       tempStyle = TxtThemesXs.bold72;
       iconSize = 96;
-      conditionStyle = TxtThemesXs.black11;
+      conditionStyle = TxtThemesXs.black16;
     } else if (width < 1440) {
       tempStyle = TxtThemes.bold72;
       iconSize = 128;
-      conditionStyle = TxtThemes.black11;
+      conditionStyle = TxtThemes.black16;
     } else {
       tempStyle = TxtThemesXl.bold72;
       iconSize = 240;
-      conditionStyle = TxtThemesXl.black11;
+      conditionStyle = TxtThemesXl.black16;
     }
     return Container(
       width: double.infinity,
@@ -388,7 +388,8 @@ class TransparentCard extends StatelessWidget {
               ),
               Text(
                 status,
-                style: conditionStyle.copyWith(color: MyColors.white2),
+                style: conditionStyle.copyWith(
+                    color: MyColors.white2, letterSpacing: 1.2),
               )
             ],
           )
@@ -453,9 +454,11 @@ class WeatherListCard extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: days.length,
+              itemCount: days.length - 1,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (ctx, index) {
+                final int time = days[index + 1]['dt'];
+                final String temp = days[index + 1]['temp']['day'].toString();
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -468,9 +471,7 @@ class WeatherListCard extends StatelessWidget {
                       width: 18,
                     ),
                     Text(
-                      (days[index]['temp']['day'] as double)
-                              .toStringAsFixed(1) +
-                          "\u00B0C",
+                      double.parse(temp).toStringAsFixed(1) + "\u00B0C",
                       style: tempStyle.copyWith(color: MyColors.primaryGray),
                     ),
                     SizedBox(
@@ -481,11 +482,19 @@ class WeatherListCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          getWeekDay(DateTime.now()),
+                          getWeekDay(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              time * 1000,
+                            ),
+                          ),
                           style: dayStyle.copyWith(color: MyColors.primaryGray),
                         ),
                         Text(
-                          getMonthDay(DateTime.now()),
+                          getMonthDay(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              time * 1000,
+                            ),
+                          ),
                           style: dayStyle.copyWith(
                               color: MyColors.secondaryPurple),
                         )
