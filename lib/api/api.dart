@@ -25,7 +25,7 @@ Future<Map<String, dynamic>> getForecast(
     }
   }
 
-  current = await getCurrent(location);
+  current = await getCurrent(location, skipCache);
 
   double lon = current['coord']['lon'];
   double lat = current['coord']['lat'];
@@ -34,6 +34,7 @@ Future<Map<String, dynamic>> getForecast(
 
   if (ret != null) {
     ret['cachedAt'] = _now.millisecondsSinceEpoch;
+    ret['q'] = location;
     putContent(contentKey, jsonEncode(ret));
     return ret;
   }
@@ -41,7 +42,7 @@ Future<Map<String, dynamic>> getForecast(
   return cache;
 }
 
-Future<Map<String, dynamic>> getCurrent(String location) async {
+Future<Map<String, dynamic>> getCurrent(String location, bool skipCache) async {
   const contentKey = 'current.json';
   final String _tmp = await getContent(contentKey);
   final DateTime _now = DateTime.now();
@@ -49,7 +50,7 @@ Future<Map<String, dynamic>> getCurrent(String location) async {
   Map<String, dynamic>? ret = {};
   Map<String, dynamic> cache = {};
 
-  if (_tmp.isNotEmpty) {
+  if (skipCache == false && _tmp.isNotEmpty) {
     cache = jsonDecode(_tmp);
     if (_now
             .difference(DateTime.fromMillisecondsSinceEpoch(cache['cachedAt']))
