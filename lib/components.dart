@@ -449,7 +449,7 @@ class WeatherListCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Future Weather",
+            "Upcoming Days",
             style: titleStyle.copyWith(color: MyColors.primaryGray),
           ),
           Expanded(
