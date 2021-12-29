@@ -5,26 +5,27 @@ Map<String, dynamic> cacheCurrent = {
   ],
   "base": "stations",
   "main": {
-    "temp": 296.14,
-    "feels_like": 296.06,
-    "temp_min": 296.14,
-    "temp_max": 296.14,
-    "pressure": 1013,
+    "temp": 21.99,
+    "feels_like": 21.81,
+    "temp_min": 21.99,
+    "temp_max": 21.99,
+    "pressure": 1017,
     "humidity": 60
   },
   "visibility": 3500,
-  "wind": {"speed": 2.06, "deg": 250},
-  "clouds": {"all": 75},
-  "dt": 1640092222,
+  "wind": {"speed": 0, "deg": 0},
+  "clouds": {"all": 40},
+  "dt": 1640704000,
   "sys": {
     "type": 1,
     "id": 9145,
     "country": "BD",
-    "sunrise": 1640046975,
-    "sunset": 1640085388
+    "sunrise": 1640651957,
+    "sunset": 1640690409
   },
   "timezone": 21600,
   "id": 1185241,
   "name": "Dhaka",
-  "cod": 200
+  "cod": 200,
+  "cachedAt": 1640704408844
 };
